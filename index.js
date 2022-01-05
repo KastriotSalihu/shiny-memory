@@ -250,7 +250,6 @@ const getRandomClosePositions = (position, numberOfClosePositions, fromDirection
     while (directions.length && positions.length < numberOfClosePositions + 1) {
         const direction = [directions.pop()];
         const nearby = getPositionNearbyGrid(position.x, position.y, position.x + 2, position.y + 2, direction);
-        // since were only using one direction, nearby.length will be only one or zero
         if (nearby.length > 0) {
             positions.push(nearby[0]);
         }
