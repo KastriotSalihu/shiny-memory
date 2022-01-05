@@ -254,9 +254,6 @@ const getRandomClosePositions = (position, numberOfClosePositions, fromDirection
             positions.push(nearby[0]);
         }
     }
-    // if no direction has been found
-    // implicitly that probably means that the field is too small
-    // perhaps 1x1
     return positions;
 };
 
@@ -301,31 +298,34 @@ createTable(createField(fieldWidth, fieldHeight));
 const table = document.getElementById("table");
 table.onclick = event => {
     const searchDirections = Object.entries(DIRECTIONS).map(x => x[1]); // get all possible directions
-    // const searchDirections = [DIRECTIONS.west, DIRECTIONS.north, DIRECTIONS.east, DIRECTIONS.south];
     const clickedCell = event.target;
     const x = parseInt(clickedCell.dataset.x);
     const y = parseInt(clickedCell.dataset.y);
-    let uncoveredFields;
+
+    let cellsToTraverse;
     if (!field) {
-        const safePositions = initGame({ x, y });
-        uncoveredFields = [];
-        uncoveredFields = safePositions
-            .map(safePosition => traversedFieldsBFS({
-                x: safePosition.x,
-                y: safePosition.y
-            }, field, fieldWidth, fieldHeight, traversedFields, searchDirections))
-            .flat();
+        cellsToTraverse = initGame({ x, y });
     }
     else {
-        uncoveredFields = traversedFieldsBFS({ x, y }, field, fieldWidth, fieldHeight, traversedFields, searchDirections);
+        cellsToTraverse = [{ x, y }];
     }
-    iterateCells(table, uncoveredFields, (cellElement, rowIndex, columnIndex) => {
-        populateCell(cellElement, field[rowIndex][columnIndex], rowIndex, columnIndex, traversedFields);
-    });
+
+    traverseAndUncover(cellsToTraverse, searchDirections, traversedFields);
+
     if (field[y][x] === mineMark) {
         markCellAsMine(getTableCell(table, y, x));
         alert("Game Over!");
     } else if (checkIfMinesCleared(traversedFields, numberOfMines)) {
         alert("Nice!");
     }
+};
+
+const traverseAndUncover = (cells, searchDirections, traversedFields) => {
+    const uncoveredFields = cells
+        .map((cell) => traversedFieldsBFS(cell, field, fieldWidth, fieldHeight, traversedFields, searchDirections))
+        .flat();
+
+    iterateCells(table, uncoveredFields, (cellElement, rowIndex, columnIndex) => {
+        populateCell(cellElement, field[rowIndex][columnIndex], rowIndex, columnIndex, traversedFields);
+    });
 };
