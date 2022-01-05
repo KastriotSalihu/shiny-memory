@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        :root {
+            --content-height: 105px;
+            --content-width: 105px;
+        }
+
+        html,
+        body {
+            background-color: rgb(40, 41, 43);
+            color: antiquewhite;
+        }
+
+        table {
+            border: 1px solid black;
+        }
+
+        td {
+            border: 1px solid black;
+            position: relative;
+            height: var(--content-height);
+            width: var(--content-width);
+            text-align: center;
+        }
+
+        td .content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .mine {
+            background-color: red;
+        }
+
+        .uncovered {
+            box-shadow: 1px 1px 8px 7px #154fc2 inset;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="tbl-wrapper">
+        <table id="table">
+
+        </table>
+    </div>
+    <script src="index.js"></script>
+</body>
+
+</html>
